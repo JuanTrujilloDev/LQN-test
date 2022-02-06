@@ -1,6 +1,6 @@
 *.pyc
 .idea/*
-.vscode/*
+vscode/*
 .pytest_cache/*
 
 *.sqlite3
