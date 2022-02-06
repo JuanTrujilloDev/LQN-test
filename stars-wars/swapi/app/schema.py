@@ -2,6 +2,7 @@ from turtle import home
 import graphene
 from django.db.models import Q
 from graphene_django.filter import DjangoFilterConnectionField
+from django_filters import OrderingFilter, FilterSet
 from graphene_django.types import DjangoObjectType
 from graphql_relay.node.node import from_global_id
 
@@ -173,13 +174,17 @@ class AddFilm(graphene.relay.ClientIDMutation):
 
         return AddFilm(film=film)
 
+
+
+
 class PeopleNode(DjangoObjectType):
     class Meta:
         model = People
-        interfaces = (graphene.relay.Node,)
-        fields = ("height", "mass", "hair_color", "skin_color", "eye_color", "birth_year",
+        interfaces = (graphene.relay.Node,) 
+        fields = ("name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year",
                     "gender", "home_world")
         filter_fields = ['id', 'gender', 'name']
+    
 
 class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
     """
@@ -251,15 +256,17 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
         
         # Extraemos el id en caso de que exista    
         if raw_id:
-            kw['id'] = from_global_id(raw_id)[1]
+            kw['id'] = from_global_id(raw_id)[1] #from_global_id traduce el id de GraphQL a el int=pk de sqlite (En este caso)
+            print(kw['id'])
         # Si mandamos films extraemos los id's de los films
-        # Si no retornamos None.
+        # Y ejecutamos el manage Films el cual retorna la persona
         if film_ids:
-             ids = [ids for ids in kw['data'].pop('film_ids')]
+            ids = [ids for ids in kw['data'].pop('film_ids')]
+            people = manageFilms(ids, kw, raw_id)
+        #Si no utilizamos la funcion auxiliar para crear las personas.
         else:
-            ids = None
-        # Utilizamos una funcion auxiliar para crear las personas.
-        people = manageFilms(ids, kw, raw_id)
+            people = generic_model_mutation_process(**kw)
+
 
         # Al final retornamos el usuario.
         return AddOrUpdatePeople(people=people)
