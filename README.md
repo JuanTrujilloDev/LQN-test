@@ -64,7 +64,7 @@ To get running the project you MUST follow this steps:
 
 ### Running the server
 
-    `` python manage.py runserver ``
+    ``` python manage.py runserver ```
 
 ### Queries / Mutations
 
@@ -87,7 +87,7 @@ python manage.py test app.test
 ## Extras
 
 * I did all the TODOs I found.
-* Tried doing Flake8 formatting into all code I added.
+* Tried doing Flake8 formatting into all the code I added.
 
 ## Notes
 
