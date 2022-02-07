@@ -1,9 +1,6 @@
-from turtle import home
 import graphene
 from django.db.models import Q
-import graphene_django
 from graphene_django.filter import DjangoFilterConnectionField
-from django_filters import OrderingFilter, FilterSet
 from graphene_django.types import DjangoObjectType
 from graphql_relay.node.node import from_global_id
 
@@ -15,11 +12,12 @@ class PlanetNode(DjangoObjectType):
     class Meta:
         model = Planet
         interfaces = (graphene.relay.Node,)
-        filter_fields = {'name': ['iexact', 'icontains', 'contains', 'exact'], }
+        filter_fields = {'name': ['iexact', 'icontains', 
+                        'contains', 'exact'],}
 
-#Esta mutacion agrega o actualiza planteas.
-#Depende si le pasamos el id en la data.
-class AddOrUpdatePlanet(graphene.relay.ClientIDMutation):
+# Esta mutacion agrega o actualiza planteas.
+# Depende si le pasamos el id en la data.
+class AddOrUpdatePlanet(graphene.relay.ClientIDMutation):  
     class Input:
         id = graphene.ID(required=False)
         name = graphene.String(required=True)
@@ -36,11 +34,13 @@ class AddOrUpdatePlanet(graphene.relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, args, context, **kwargs):
-        # TODO: Por que args es None?
-        # No estoy seguro de esta respuesta pero creo que es debido a que al hacer las queries
-        # se toman por defecto pares de key, values kwargs (en el JSON Data) y por lo tanto los args
-        # No se definen los args
 
+        # TODO: Por que args es None?
+        # No estoy seguro de esta respuesta.
+        # pero creo que es debido a que al hacer las queries
+        # se toman por defecto pares de key, values 
+        # En el kwargs (JSON Data) y por lo tanto los args
+        # No se definen, ni se utilizan.
 
         # TODO: Para que sirve el context?
         # El execution context nos sirve para traer informacion como el usuario que se encuentra logeado,
@@ -185,24 +185,23 @@ class PeopleNode(DjangoObjectType):
     class Meta:
         model = People
         interfaces = (graphene.relay.Node,) 
-        #TODO FILTRAR ENUMS
-        fields = ["name", "height", "mass", "gender", "hair_color", "skin_color", "eye_color", "birth_year",
-                    "home_world"]
+        # TODO FILTRAR ENUMS
+        fields = ["name", "height", "mass", "gender", "hair_color", 
+                  "skin_color", "eye_color", "birth_year", "home_world"]
         filter_fields = {
-            'id' : ['exact', 'istartswith'],
-            'name' : ['exact', 'istartswith'],
-            'gender' : ['exact', 'iexact']
+            'id': ['exact', 'istartswith'],
+            'name': ['exact', 'istartswith'],
+            'gender': ['exact', 'iexact']
         }
-        filter_order_by = ['name']
-        
-    
+        filter_order_by = ['name']          
 
 class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
     """
     Clase AddOrUpdate PEOPLE
 
-    Le modifique el nombre debido a que aqui directamente tambien podemos actualizar los modelos
-    haciendo uso del generi_model_mutation_process
+    Le modifique el nombre debido a que aqui directamente
+    tambien podemos actualizar los modelos haciendo uso
+    del metodo generic_model_mutation_process.
 
     En los inputs tenemos todos los atributos del modelo Persona.
 
@@ -221,9 +220,8 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
         eye_color = graphene.String(required=False)
         birth_year = graphene.String(required=False)
         gender = graphene.String(required=False)
-
         home_world_id = graphene.ID(required=True)
-        
+
         #Anadiendo campo film al mutation
 
         film_ids = graphene.List(graphene.ID,required=False)
@@ -232,17 +230,17 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
     planet = graphene.Field(PlanetNode)
     film = graphene.Field(FilmNode)
 
-  #  @classmethod
-  #  def mutate_and_get_payload(cls, args, context, **kwargs):
-  #      raw_id = kwargs.get('id', None)
-#
-#        kw = {'model': People, 'data': kwargs}
-#        if raw_id:
-#            kw['id'] = from_global_id(raw_id)[1]
-#        people = generic_model_mutation_process(**kw)
-#        return AddPeople(people=people)
+    # @classmethod
+    # def mutate_and_get_payload(cls, args, context, **kwargs):
+    #    raw_id = kwargs.get('id', None)
+    #
+    #    kw = {'model': People, 'data': kwargs}
+    #    if raw_id:
+    #        kw['id'] = from_global_id(raw_id)[1]
+    #    people = generic_model_mutation_process(**kw)
+    #    return AddPeople(people=people)
 
-    #CREANDO MI PROPIA MUTACON PARA ANADIR PEOPLE
+    # CREANDO MI PROPIA MUTACON PARA ANADIR PEOPLE
 
     @classmethod
     def mutate_and_get_payload(cls, args, context, **kwargs):
@@ -257,7 +255,7 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
 
         3. De lo contrario editara los campos brindados de esa persona.
 
-        4. Para anadir o editar 
+        4. Para anadir o editar.
         
         """
         raw_id = kwargs.get('id', None)
@@ -267,8 +265,11 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
         
         # Extraemos el id en caso de que exista    
         if raw_id:
-            kw['id'] = from_global_id(raw_id)[1] #from_global_id traduce el id de GraphQL a el int=pk de sqlite (En este caso)
+        # from_global_id traduce el id de GraphQL a el int=pk de sqlite (En este caso)
+            kw['id'] = from_global_id(raw_id)[1] 
+        
             print(kw['id'])
+
         # Si mandamos films extraemos los id's de los films
         # Y ejecutamos el manage Films el cual retorna la persona
         if film_ids:
@@ -310,7 +311,8 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     add_or_update_planet = AddOrUpdatePlanet.Field()  # TODO: debería tener 1 para add y otro para update?
-                                                      # ANS: No, con el add planet si le pasamos el ID podemos actualizarlo.
+                                                      # ANS: No, con el add planet si le pasamos el ID 
+                                                      # podemos actualizarlo.
     add_director = AddDirector.Field()
 
     add_producer = AddProducer.Field()

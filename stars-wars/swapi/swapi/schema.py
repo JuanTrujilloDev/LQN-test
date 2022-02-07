@@ -25,7 +25,7 @@ schema = graphene.Schema(query=Query, mutation=Mutation)
 #
 #        '''
 
-#Revisando cuantas personas hay en la DB -> 84 People
+#Revisando query
 #def test_query():
 #    result = schema.execute(query)
 #    print(len(result.data['allPeople']['edges']))
