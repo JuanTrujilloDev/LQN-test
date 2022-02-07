@@ -13,7 +13,21 @@ class Mutation(sw_mutation):
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
 
-# def test_query():
-#     result = schema.execute(query)
-#     assert not result.errors
-#     assert result.data == {"patron": {"id": "1", "name": "Syrus", "age": 27}}
+#query = '''
+#            query{
+#                allPeople(id:""){
+#                    edges{
+#                        node{
+#                            id
+#                        }
+#               }
+#            }
+#
+#        '''
+
+#Revisando cuantas personas hay en la DB -> 84 People
+#def test_query():
+#    result = schema.execute(query)
+#    print(len(result.data['allPeople']['edges']))
+
+#test_query()

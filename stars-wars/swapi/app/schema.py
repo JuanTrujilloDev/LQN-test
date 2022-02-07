@@ -1,6 +1,7 @@
 from turtle import home
 import graphene
 from django.db.models import Q
+import graphene_django
 from graphene_django.filter import DjangoFilterConnectionField
 from django_filters import OrderingFilter, FilterSet
 from graphene_django.types import DjangoObjectType
@@ -175,15 +176,25 @@ class AddFilm(graphene.relay.ClientIDMutation):
         return AddFilm(film=film)
 
 
+class GenderChoices(graphene.Enum):
+    MALE = "MALE"
+    FEMALE = "FEMALE"
 
 
 class PeopleNode(DjangoObjectType):
     class Meta:
         model = People
         interfaces = (graphene.relay.Node,) 
-        fields = ("name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year",
-                    "gender", "home_world")
-        filter_fields = ['id', 'gender', 'name']
+        #TODO FILTRAR ENUMS
+        fields = ["name", "height", "mass", "gender", "hair_color", "skin_color", "eye_color", "birth_year",
+                    "home_world"]
+        filter_fields = {
+            'id' : ['exact', 'istartswith'],
+            'name' : ['exact', 'istartswith'],
+            'gender' : ['exact', 'iexact']
+        }
+        filter_order_by = ['name']
+        
     
 
 class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
@@ -277,6 +288,10 @@ class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
 
 
 class Query(graphene.ObjectType):
+    class GenreEnum(graphene.Enum):
+        YES = 1
+        NO = 2
+
     planet = graphene.relay.Node.Field(PlanetNode)
     all_planets = DjangoFilterConnectionField(PlanetNode)
 
