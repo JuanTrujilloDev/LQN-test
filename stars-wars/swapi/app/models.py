@@ -29,50 +29,52 @@ class Planet(TimeStampedModel, SimpleNameModel):
 
 
 class People(TimeStampedModel, SimpleNameModel):
-    """ Personajes del universo de Star Wars 
-    
+    """Personajes del universo de Star Wars
     
     Attributes:
 
     height: CharField(Might need to recieve only numbers in the input field)
     mass: CharField(Same as Height)
-    hair_color: CharField, uses a choices argument to select only from hair_color_options
-    skin_color: CharField, it is open to the user, it should be changed to options aswell
+    hair_color: CharField, uses hair_color_options to choice.
+    skin_color: CharField, open to the user.
     eye_color: Charfield, applies choices from eye_color_options.
     birth_year: Charfield, it can be changed to DateField.
     gender: Charfield.
-    home_world: ForeignKey, references Planets model.
-    
+    home_world: ForeignKey, references Planets model. 
     """
+
     height = models.CharField(max_length=16, blank=True)
     mass = models.CharField(max_length=16, blank=True)
     hair_color_options = [
-        ('Black', 'BLACK'),
-        ('Brown', 'BROWN'),
-        ('Blonde', 'BLONDE'),
-        ('Red', 'RED'),
-        ('White', 'WHITE'),
-        ('Bald', 'BALD')
-        
+        ('black', 'Black'),
+        ('brown', 'Brown'),
+        ('blond', 'Blond'),
+        ('red', 'Red'),
+        ('white', 'White'),
+        ('bald', 'Bald')
+      
     ]
-    hair_color = models.CharField(max_length=32, blank=True, choices=hair_color_options, default="Bald")
+    hair_color = models.CharField(max_length=32, blank=True, 
+                                  choices=hair_color_options, default="bald")
     skin_color = models.CharField(max_length=32, blank=True)
 
     eye_color_options = [
-        ('Black','BLACK'), 
-        ('Brown','BROWN'), 
-        ('Yellow','YELLOW'), 
-        ('Red','RED'), 
-        ('Green', 'GREEN'),
-        ('Purple', 'PURPLE'), 
-        ('Unknown' , 'UNKNOWN')
+        ('black','Black'),    
+        ('brown','Brown'),    
+        ('yellow','Yellow'),    
+        ('red','Red'),  
+        ('green', 'Green'), 
+        ('purple', 'Purple'),  
+        ('unknown', 'Unknown')
     ]
 
+    eye_color = models.CharField(max_length=32, blank=True,
+                                 choices=eye_color_options, default="Unknown")
 
-    eye_color = models.CharField(max_length=32, blank=True, choices=eye_color_options, default="Unknown")
     birth_year = models.CharField(max_length=16, blank=True)
     gender = models.CharField(max_length=64, blank=True)
-    home_world = models.ForeignKey(Planet, on_delete=models.CASCADE, related_name='inhabitants')
+    home_world = models.ForeignKey(Planet, on_delete=models.CASCADE, 
+                                   related_name='inhabitants')
 
     class Meta:
         db_table = 'people'
@@ -98,10 +100,15 @@ class Film(TimeStampedModel):
     episode_id = models.PositiveSmallIntegerField()
     opening_crawl = models.TextField(max_length=1000)
     release_date = models.DateField()
-    director = models.ForeignKey(Director, on_delete=models.CASCADE, related_name='films')
+    director = models.ForeignKey(Director, on_delete=models.CASCADE, 
+                                 related_name='films')
+            
     producer = models.ManyToManyField(Producer, related_name='films')
-    characters = models.ManyToManyField(People, related_name='films', blank=True)
-    planets = models.ManyToManyField(Planet, related_name='films', blank=True)
+    characters = models.ManyToManyField(People, related_name='films', 
+                                        blank=True)
+
+    planets = models.ManyToManyField(Planet, related_name='films', 
+                                     blank=True)
 
     class Meta:
         db_table = 'film'

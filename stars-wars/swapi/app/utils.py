@@ -1,4 +1,4 @@
-from .models import Film, People
+from .models import Film
 
 def generic_model_mutation_process(model, data, id=None, commit=True):
     """
