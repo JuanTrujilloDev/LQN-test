@@ -4,7 +4,7 @@ from graphene_django.utils.testing import GraphQLTestCase
 from swapi.schema import schema
 
 class QueryAllTestCase(GraphQLTestCase):
-    fixtures = ['app/fixtures/unittest.json'] #Data que sera cargada a la BD -> Son 87 personas
+    fixtures = ['app/fixtures/unittest.json'] # Data que sera cargada a la BD -> Son 87 personas
     GRAPHQL_URL = '/graphql/'
     GRAPHQL_SCHEMA = schema
     print("----------------------------TESTING NOTES-----------------------------")
@@ -62,7 +62,7 @@ class QueryAllTestCase(GraphQLTestCase):
         persona_update = json.loads(response.content)['data']['allPeople']['edges'][0]
         print(f"\nPersona a Actualizar: \n\n"+ f"-id: {persona_update['node']['id']} \n" +
                 f"-Nombre:  {persona_update['node']['name']} \n")
-        #Validating status code
+        # Validating status code
         self.assertResponseNoErrors(response)
         self.assertEqual(87, cantidad)
 

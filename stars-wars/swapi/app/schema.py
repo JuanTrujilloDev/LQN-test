@@ -176,10 +176,6 @@ class AddFilm(graphene.relay.ClientIDMutation):
         return AddFilm(film=film)
 
 
-class GenderChoices(graphene.Enum):
-    MALE = "MALE"
-    FEMALE = "FEMALE"
-
 
 class PeopleNode(DjangoObjectType):
     class Meta:
@@ -193,7 +189,8 @@ class PeopleNode(DjangoObjectType):
             'name': ['exact', 'istartswith'],
             'gender': ['exact', 'iexact']
         }
-        filter_order_by = ['name']          
+        filter_order_by = ['name']  
+        convert_choices_to_enum = ["hair_color", "eye_color"]        
 
 class AddOrUpdatePeople(graphene.relay.ClientIDMutation):
     """
