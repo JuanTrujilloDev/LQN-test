@@ -21,7 +21,7 @@ The algorithm has O(n) time speed, because it goes through the elements once.
 
 The task was a bit more complex than the first one, basically I had to find a way to get the longest route of consecutive names having the last letter of the preceding name.
 
-I googled the longest path possible algorithm, and fin a way to solve it. The only problem I encountered was that I couldn't find a way to remove repeated elements and getting a node back (I visualized the problem as tree nodes).
+I googled the longest path possible algorithm, and found a way to solve it. The only problem I encountered was that I couldn't find a way to remove repeated elements and getting a node back (I visualized the problem as tree nodes).
 
 I found help on StackOverflow and ended with a solution.
 
