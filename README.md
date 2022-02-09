@@ -13,7 +13,7 @@
 
 ### Buzz-Bazz
 
-In this problem I had to code an algorithm that cicles through 0-100 printing those numbers, it also has to print buzz on the same line in case the name is even, and bazz if it is multiple of 5.
+In this problem I had to code an algorithm that cicles through 0-100 printing those numbers, it also has to print buzz on the same line in case the num is even, and bazz if it is multiple of 5.
 
 The algorithm has O(n) time speed, because it goes through the elements once.
 
